@@ -1,34 +1,36 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
-  namespace: {{ .Release.Namespace }}
+  labels:
+    app: grafana
+  name: grafana
 spec:
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: grafana
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app: grafana
     spec:
       securityContext:
         fsGroup: 472
         supplementalGroups:
           - 0
       containers:
-        - name: {{ .Chart.Name }}
-          image: grafana/grafana:10.1.5
+        - name: grafana
+          image: grafana/grafana:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - name: http-grafana
-              containerPort: {{ .Values.port }}
+            - containerPort: 3000
+              name: http-grafana
               protocol: TCP
           readinessProbe:
             failureThreshold: 3
             httpGet:
               path: /robots.txt
-              port: {{ .Values.port }}
+              port: 3000
               scheme: HTTP
             initialDelaySeconds: 10
             periodSeconds: 30
@@ -40,7 +42,7 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             tcpSocket:
-              port: {{ .Values.port }}
+              port: 3000
             timeoutSeconds: 1
           resources:
             requests:
@@ -53,3 +55,31 @@ spec:
         - name: grafana-pv
           persistentVolumeClaim:
             claimName: grafana-pvc
+---
+apiVersion: v1
+kind: Service-loadbalancer
+metadata:
+  name: grafana
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: http-grafana
+  selector:
+    app: grafana
+  sessionAffinity: None
+  type: LoadBalancer
+
+---
+  apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30000
+  selector:
+    app: grafana

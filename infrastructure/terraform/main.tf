@@ -86,7 +86,7 @@ resource "yandex_kubernetes_node_group" "k8s-node-group" {
       }
 
       resources {
-        memory = 4
+        memory = 8
         cores = 2
       }
 
@@ -207,6 +207,30 @@ resource "yandex_dns_recordset" "dns_domain_prometheus" {
 resource "yandex_dns_recordset" "dns_domain_grafana" {
   zone_id = yandex_dns_zone.domain.id
   name = join("", ["grafana.", var.domain, "."])
+  type = "A"
+  ttl = 300
+  data = [yandex_vpc_address.address.external_ipv4_address[0].address]
+}
+
+resource "yandex_dns_recordset" "dns_domain_gitlab" {
+  zone_id = yandex_dns_zone.domain.id
+  name = join("", ["gitlab.", var.domain, "."])
+  type = "A"
+  ttl = 300
+  data = [yandex_vpc_address.address.external_ipv4_address[0].address]
+}
+
+resource "yandex_dns_recordset" "dns_domain_loki" {
+  zone_id = yandex_dns_zone.domain.id
+  name = join("", ["loki.", var.domain, "."])
+  type = "A"
+  ttl = 300
+  data = [yandex_vpc_address.address.external_ipv4_address[0].address]
+}
+
+resource "yandex_dns_recordset" "dns_domain_kas" {
+  zone_id = yandex_dns_zone.domain.id
+  name = join("", ["kas.", var.domain, "."])
   type = "A"
   ttl = 300
   data = [yandex_vpc_address.address.external_ipv4_address[0].address]

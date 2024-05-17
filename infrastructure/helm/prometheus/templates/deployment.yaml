@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prometheus
+  name: {{ .Chart.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: prometheus
-    provider: prometheus
+    app: {{ .Chart.Name }}
+    provider: {{ .Chart.Name }}
 spec:
   selector:
     matchLabels:
-      app: prometheus
+      app: {{ .Chart.Name }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: prometheus
+        app: {{ .Chart.Name }}
       annotations:
         co.elastic.logs/enabled: "true"
         co.elastic.logs/format: zap
@@ -41,7 +41,7 @@ spec:
           - --web.enable-lifecycle
           - --log.level=debug
         ports:
-          - containerPort: 9090
+          - containerPort: {{ .Values.port }}
         volumeMounts:
         {{- range $path, $bytes := .Files.Glob ( printf "rules/**.yaml") }}
         {{- $name := base $path }}

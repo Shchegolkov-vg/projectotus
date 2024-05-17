@@ -2,10 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Chart.Name }}
-  namespace: {{ .Release.Namespace }}
+  name: grafana
   labels:
-    app: {{ .Chart.Name }}
+    app: grafana
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -18,6 +17,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Chart.Name }}
+            name: grafana
             port:
-              number: {{ .Values.port }}
+              number: 3000
