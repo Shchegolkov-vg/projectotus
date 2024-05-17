@@ -5,7 +5,7 @@ metadata:
   name: prometheus-conf
   namespace: {{ .Release.Namespace }}
   labels:
-    app: prometheus
+    app: {{ .Chart.Name }}
 data:
   prometheus.yml: |
     global:
@@ -39,19 +39,3 @@ data:
       - source_labels: [__meta_kubernetes_pod_name]
         action: replace
         target_label: kubernetes_pod_name
-    {{- range $yandex := .Values.yandex_cloud_services }}
-    - job_name: yandex_service_{{ $yandex.service }}
-      metrics_path: '/monitoring/v2/prometheusMetrics'
-      params:
-        folderId:
-        - {{ $yandex.folderId }}
-        service:
-        - {{ $yandex.service }}
-      scrape_interval: {{ $yandex.scrape_interval | default "60s" | quote }}
-      bearer_token: {{ $yandex.bearer_token }}
-      static_configs:
-      - targets: ['monitoring.api.cloud.yandex.net']
-        labels:
-          folderId: {{ $yandex.folderId }}
-          service: {{ $yandex.serviceId }}
-    {{ end -}}

@@ -1,9 +1,0 @@
-groups:
-  - name: recordingRules-1
-    rules:
-      - record: node_memory_MemUsage_percent
-        expr: 100 - (100 * node_memory_MemFree_bytes / node_memory_MemTotal_bytes)
-  - name: recording_registrations
-    rules:
-      - record: registrations_per_day
-        expr: sum by (day) (increase(registrations_total[1d]))
