@@ -5,7 +5,7 @@ frontend:
   stage: module-pipelines
   trigger:
     include:
-      - "/frontend/frontend_build.yml"
+      - "/frontend_build.yml"
     strategy: depend
   only:
     changes:

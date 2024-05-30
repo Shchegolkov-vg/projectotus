@@ -9,6 +9,6 @@ appVersion: "latest"
 
 dependencies:
   - name: backend
-    version: 0.1.0
+    version: {{VERSION}}
   - name: frontend
-    version: 0.1.0
+    version: {{VERSION}}

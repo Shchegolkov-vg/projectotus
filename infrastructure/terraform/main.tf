@@ -99,7 +99,7 @@ resource "yandex_kubernetes_node_group" "k8s-node-group" {
     scale_policy {
         auto_scale {
         min     = 1
-        max     = 3
+        max     = 2
         initial = 2
         }
     }
@@ -231,6 +231,14 @@ resource "yandex_dns_recordset" "dns_domain_loki" {
 resource "yandex_dns_recordset" "dns_domain_kas" {
   zone_id = yandex_dns_zone.domain.id
   name = join("", ["kas.", var.domain, "."])
+  type = "A"
+  ttl = 300
+  data = [yandex_vpc_address.address.external_ipv4_address[0].address]
+}
+
+resource "yandex_dns_recordset" "dns_domain_nexus" {
+  zone_id = yandex_dns_zone.domain.id
+  name = join("", ["nexus.", var.domain, "."])
   type = "A"
   ttl = 300
   data = [yandex_vpc_address.address.external_ipv4_address[0].address]

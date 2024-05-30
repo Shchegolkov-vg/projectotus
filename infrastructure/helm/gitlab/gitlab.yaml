@@ -51,7 +51,7 @@ global:
   edition: ee
 
   ## https://docs.gitlab.com/charts/charts/globals#gitlab-version
-  gitlabVersion: "16.11.2"
+  gitlabVersion: "17.0.1"
 
   ## https://docs.gitlab.com/charts/charts/globals#application-resource
   application:
@@ -60,10 +60,10 @@ global:
     allowClusterRoles: true
   ## https://docs.gitlab.com/charts/charts/globals#configure-host-settings
   hosts:
-    domain: project-otus.ru
+    domain: gitlab.project-otus.ru
     hostSuffix:
-    https: true
-    externalIP: 158.160.155.19
+    https: false
+    externalIP: 158.160.151.244
     ssh: ~
     gitlab: {}
     minio: {}
@@ -205,7 +205,7 @@ global:
     dbSecret: {}
     virtualStorages:
       - name: default
-        gitalyReplicas: 3
+        gitalyReplicas: 1
         maxUnavailable: 1
     psql:
       sslMode: disable
@@ -479,11 +479,11 @@ global:
       #   key:
 
     ## https://docs.gitlab.com/charts/charts/globals#kas-settings
-    gitlab_kas:
+    gitlab_kas: {}
       # secret:
       # key:
       # enabled:
-      externalUrl: kas.project-otus.ru
+      # externalUrl:
       # internalUrl:
 
     ## https://docs.gitlab.com/charts/charts/globals#suggested-reviewers-settings
@@ -885,7 +885,7 @@ upgradeCheck:
 certmanager-issuer:
 #   # The email address to register certificates requested from Let's Encrypt.
 #   # Required if using Let's Encrypt.
-  email: voovik59@gmail.com
+   email: voovik59@gmail.com
 
 ## Installation & configuration of jetstack/cert-manager
 ## See requirements.yaml for current version
@@ -1001,7 +1001,7 @@ haproxy:
 ## Installation & configuration of stable/prometheus
 ## See requirements.yaml for current version
 prometheus:
-  install: true
+  install: false
   rbac:
     create: true
   alertmanager:
@@ -1252,7 +1252,6 @@ gitlab-runner:
       [[runners]]
         [runners.kubernetes]
         image = "ubuntu:22.04"
-        privileged = true
         {{- if .Values.global.minio.enabled }}
         [runners.cache]
           Type = "s3"
