@@ -5,11 +5,6 @@ stages:
   - notify
   - deploy
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
-  - project: 'templates/ci'
-    file: 'DockerInDockerTemplate.yml'
-
 variables:
   VERSION: 1.0.{$CI_PIPELINE_ID}
 
@@ -42,26 +37,15 @@ sonarqube-frontend-sast:
       -Dsonar.login="${SONAR_FRONTEND_TOKEN}"
       -Dsonar.qualitygate.wait=false
 
-eslint-sast:
-  stage: test
-  needs: []
-
-gosec-sast:
-  stage: test
-  needs: []
-
-nodejs-scan-sast:
-  stage: test
-  needs: []
-
-semgrep-sast:
-  stage: test
-  needs: []
-
-spotbugs-sast:
+go-test:
   stage: test
   rules:
-    - when: never
+    - changes:
+        - backend/*
+  image: golang:1.17.13-bullseye
+  script:
+    - cd backend
+    - go test -v ./...
 
 release-frontend-image-latest:
   variables:
@@ -84,32 +68,28 @@ release-frontend-helm-chart:
     - sed -i "s/{{TAG}}/$VERSION/" project-otus/charts/frontend/values.yaml
     - sed -i "s/{{VERSION}}/$VERSION/" project-otus/charts/frontend/Chart.yaml
     - helm package  project-otus/charts/frontend/ --version ${VERSION}
-    - curl -u ${NEXUS_USER}:${NEXUS_PASSWORD} ${NEXUS_REPO_FRONTEND_HELM} --upload-file frontend-${VERSION}.tgz
 
-telegram-notification-frontend:
-  stage: notify
-  script:
-    - if [[ $CI_COMMIT_MESSAGE == *"send notification"* ]]; then curl -X POST -H 'Content-type:application/json' --data '{"chat_id":'${telegram_chat_id}', "text":"New version of the frontend helm chart has been released - '${VERSION}' and ready to deploy.\nYou can download it from the link - '${NEXUS_REPO_FRONTEND_HELM}backend-$VERSION'."}' https://api.telegram.org/${telegram_bot_token}/sendMessage; fi
-  needs:
-    - release-frontend-helm-chart
 
-install-frontend-helm-chart:
-  variables:
-    GIT_STRATEGY: none
-  stage: deploy
-  image: alpine/helm:latest
+
+deploy-k8s:
+  stage: prodactiom
+  when: manual
   rules:
-    - when: manual
+    - changes:
+        - backend/*
   needs:
-    - release-frontend-helm-chart
+    - build-image
+  environment:
+    name: production-backend
+  image:
+    name: alpine/k8s:1.24.13
   before_script:
     - mkdir ~/.kube
-    - cat ${KUBECONFIG} | base64 -d > ~/.kube/config
-    - cat ${capem} | base64 -d > ~/.kube/ca.pem
-    - export KUBECONFIG=~/.kube/config
+    - echo ${KUBECONFIG} > ~/.kube/config
   script:
-    - helm repo add nexus ${NEXUS_REPO_FRONTEND_HELM} --username ${NEXUS_USER} --password ${NEXUS_PASSWORD}
-    - helm repo update
-    - helm upgrade frontend nexus/frontend -i --set image.tag=$VERSION  --atomic --namespace default
+    - |
+      kubectl config use-context yc-k8s-zonal-admin --namespace=default
+
+
   after_script:
     - rm ~/.kube/config

@@ -55,6 +55,10 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
               readOnly: true
+            - name: external-nginx-var-run
+              mountPath: /var/run
+            - name: external-nginx-var-cache-nginx
+              mountPath: /var/cache/nginx
             {{- if .Values.gateway.tls.certificate.enabled }}
             - name: gateway-cert
               mountPath: /etc/ssl/tls.crt
@@ -72,6 +76,10 @@ spec:
             items:
               - key: nginx.conf
                 path: nginx.conf
+        - name: external-nginx-var-run
+          emptyDir: {}
+        - name: external-nginx-var-cache-nginx
+          emptyDir: {}
         {{- if .Values.gateway.tls.certificate.enabled }}
         - name: gateway-cert
           secret:

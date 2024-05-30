@@ -1,7 +1,7 @@
 image:
   repository: voovik59/project-backend
   pullPolicy: Always
-  tag: {{TAG}}
+  tag: ""
 replicas: 2
 revisionHistoryLimit: 15
 strategy:

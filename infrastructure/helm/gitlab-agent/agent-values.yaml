@@ -61,7 +61,7 @@ serviceMonitor:
 # -- configure the agent
 config:
   # -- The user-facing URL for the in-cluster `agentk`
-  kasAddress: 'wss://kas.gitlab.com'
+  kasAddress: 'wss://kas.project-otus.ru'
   # -- add kas-headers
   # Example:
   # `[ "Cookie: gitlab-canary" ]`

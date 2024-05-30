@@ -314,18 +314,18 @@ loki:
     # Please provide these values if you are using object storage.
     bucketNames:
       chunks: chunks
-      ruler: ruler
-      admin: admin
+    #  ruler: ruler
+    #  admin: admin
     type: s3
     s3:
-      s3: storage.yandexcloud.net
+      s3: https://storage.yandexcloud.net
       endpoint: chunks
       region: null
       secretAccessKey: YCOqWPKkSTqR4jGFco7pPTIxktrTupVFTZOt09XS
       accessKeyId: YCAJEHNBz-wI58TXD3QfpsB7a
       signatureVersion: null
       s3ForcePathStyle: true
-      insecure: false
+      insecure: true
       http_config: {}
       # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
       backoff_config: {}
@@ -992,9 +992,8 @@ gateway:
             # pathType: Prefix
     # -- TLS configuration for the gateway ingress. Hosts passed through the `tpl` function to allow templating
     tls:
-      - secretName: loki.project-otus-tls
-        hosts:
-          - loki.project-otus.ru
+      - secretName: null
+        hosts: null
   # Basic auth configuration
   basicAuth:
     # -- Enables basic authentication for the gateway
