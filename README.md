@@ -74,18 +74,10 @@ helm upgrade --install loki ./loki --atomic
 ```
 Прописываем для всех А записей в cloud DNS адрес балансировщика для доступа к домену и поддоменам.
 
-
-Приложение доступно по адресу https://project-otus.ru
-![[Pasted image 20240524135533.png]]
+**Приложение** https://project-otus.ru
 **Сбора метрик кластера.**  https://prometheus.project-otus.ru
-	![[Pasted image 20240524135629.png]]
 **Мониторинга параметров работы кластера.** https://grafana.project-otus.ru
-
-![[Pasted image 20240524152204.png]]
-
-**Сбор логов с кластера.**
-Развернут сервис loki. Логи хранятся в s3 хранилище yandex cloud
-![[Pasted image 20240528004616.png]]
+**Сбор логов с кластера.** Развернут сервис loki. Логи хранятся в s3 хранилище yandex cloud
 
 CI/CD (Gitlab).
 Поднять локальный репозиторий gitlab.
