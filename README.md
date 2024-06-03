@@ -98,7 +98,8 @@ helm upgrade --install loki ./loki --atomic
 **Сбор логов с кластера.** Развернут сервис loki. Логи хранятся в s3 хранилище yandex cloud
 ![image](https://github.com/Shchegolkov-vg/projectotus/assets/154276083/4de1554a-e1be-411a-a950-ce09243a92a4)
 
-CI/CD (Gitlab).
+**CI/CD (Gitlab).**
+
 Поднят локальный репозиторий gitlab.
 В корне репозитория размещен файл .gitlab-ci.yml  который отслкживает изменеия в директориях backend/forntend. При наличии изменений запускается роцесс CI/CD состоящий из этапов:
 1. Build - упаковка приложения в docker
