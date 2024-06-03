@@ -30,7 +30,19 @@ Cостав :
 	4. infrastructure/kubernetes - манифесты для запуска публикации приложения в кластере kubernetes;
  	5. infrastructure/terraform - файлы конфигурации для разворачивания инфраструктуры в yandex cloud;
 
-Разворачивание инфраструктуры кластера:
+	Для локального запуска приложения:
+
+	```
+	cd frontend/
+	npm install
+	NODE_ENV=production VUE_APP_API_URL=http://localhost:8081 npm run serve
+
+	cd backend/
+	go run ./cmd/api
+	go test -v ./...
+	```
+
+Разворачивание инфраструктуры кластера в yandex cloud
 
 ```
 cd terraform
@@ -92,3 +104,15 @@ CI/CD (Gitlab).
 1. Build - упаковка приложения в docker
 2. Test - тестирование
 3. Deploy - ручной деплой приложения.
+
+Для локального запуска:
+
+```
+cd frontend/
+npm install
+NODE_ENV=production VUE_APP_API_URL=http://localhost:8081 npm run serve
+
+cd backend/
+go run ./cmd/api
+go test -v ./...
+```
