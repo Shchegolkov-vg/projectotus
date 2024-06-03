@@ -104,15 +104,3 @@ CI/CD (Gitlab).
 1. Build - упаковка приложения в docker
 2. Test - тестирование
 3. Deploy - ручной деплой приложения.
-
-Для локального запуска:
-
-```
-cd frontend/
-npm install
-NODE_ENV=production VUE_APP_API_URL=http://localhost:8081 npm run serve
-
-cd backend/
-go run ./cmd/api
-go test -v ./...
-```
