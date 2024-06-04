@@ -102,8 +102,14 @@ helm upgrade --install loki ./loki --atomic
 
 Поднят локальный репозиторий gitlb (gitlab.project-otus.ru)
 В корне репозитория размещен файл .gitlab-ci.yml который отслеживает изменения в директориях bacend и forntend. При выявлении изменений в директориях запускается процесс CI/CD описанный backend_ci.yml и frontend_ci.yaml состоящий из этапов:
+
 Build – упаковка приложения в docker;
+
 Test – тестирование;
+
 Release – при удачном завершении тестов образ версионируется тегом latest и отправляется в Container Registry, создается helm-chart загружаемый в репозиторий;
+
 Notify – при условии содержания в commit – “send notification” происходит отправка уведомления в телегу о выпуске нового helm-chart;
+
 Deploy – деплой приложения c использованием новой версии helm-chart;
+
